@@ -116,8 +116,8 @@ trait MethodGen extends ScalaAvroPluginComponent
                 This(clazz) DOT newTermName("convert"),
                 List(
                   TypeTree(sym.tpe),
-                  TypeTree(avroTpe))),
-                List(schema, This(clazz) DOT sym)) AS ObjectClass.tpe
+                  TypeTree(avroTpe))): Tree,
+                List(schema: Tree, This(clazz) DOT sym): List[Tree]) AS ObjectClass.tpe
           }
         }
       }

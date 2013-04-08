@@ -1,25 +1,25 @@
 import sbt._
 import Keys._
+import com.typesafe.sbt._
 
 object ScadsBuild extends Build {
-  val buildVersion = "2.1.4-SNAPSHOT"
-  val defaultScalaVersion = "2.9.1"
+  val buildVersion = "2.1.4.1"
+  val defaultScalaVersion = "2.10.1"
 
-  val buildSettings = Defaults.defaultSettings ++ GhPages.ghpages.settings ++ sbtassembly.Plugin.assemblySettings ++ Seq(
+  val buildSettings = Defaults.defaultSettings ++ SbtGhPages.ghpages.settings ++ Seq(
     organization := "edu.berkeley.cs",
     scalaVersion := defaultScalaVersion,
     version := buildVersion,
     shellPrompt := ShellPrompt.buildShellPrompt,
-    resolvers := Seq(radlabRepo, localMaven),
-    GhPages.ghpages.gitRemoteRepo := "git@github.com:radlab/SCADS.git",
+    resolvers := Seq(radlabRepo, localMaven, sonatype, sonatypeSnapshots),
+    SbtGit.git.remoteRepo := "git@github.com:radlab/SCADS.git",
     parallelExecution in Test := false,
-    libraryDependencies += "org.scala-tools.sxr" %% "sxr" % "0.2.8-SNAPSHOT" % "plugin",
     ivyConfigurations += Configurations.CompilerPlugin,
     /* HACK work around due to bugs in sbt compiler plugin handling code */
     scalacOptions <++= (update, scalaSource in Compile) map {
       (report, source) =>
         val pluginClasspath = report matching configurationFilter(Configurations.CompilerPlugin.name)
-        pluginClasspath.map("-Xplugin:" + _.getAbsolutePath).toSeq :+ "-deprecation" :+ "-unchecked" :+ "-Yrepl-sync" :+ ("-P:sxr:base-directory:" + source.getAbsolutePath)
+        pluginClasspath.map("-Xplugin:" + _.getAbsolutePath).toSeq :+ "-deprecation" :+ "-unchecked" :+ "-Yrepl-sync"
     },
     /* HACK to work around broken ~ in 0.11.0 */
     watchTransitiveSources <<=
@@ -35,6 +35,8 @@ object ScadsBuild extends Build {
   /* Artifact Repositories */
   val localMaven = "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository"
   val radlabRepo = "Radlab Repository" at "http://scads.knowsql.org/nexus/content/groups/public/"
+  val sonatype = "sonatype" at "http://oss.sonatype.org/content/repositories/releases/"
+  val sonatypeSnapshots = "sonatype-snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
   /* Aggregator Project */
   lazy val scads = Project("scads", file("."), settings = buildSettings) aggregate (config, avroPlugin, comm, deploylib, scalaEngine, piql, scadr, tpcw, modeling)
@@ -157,7 +159,7 @@ object ScadsBuild extends Build {
 
   def testDeps = Seq(scalaTest, junit)
 
-  val scalaTest = "org.scalatest" %% "scalatest" % "1.6.1"
+  val scalaTest = "org.scalatest" % "scalatest_2.10" % "1.9.1"
   val junit = "junit" % "junit" % "4.7"
 
   def avroPluginDeps = Seq(avroJava, avroIpc, scalaCompiler, configgy) ++ testDeps

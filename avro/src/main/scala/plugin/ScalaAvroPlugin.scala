@@ -51,30 +51,30 @@ trait ScalaAvroPluginComponent extends PluginComponent {
   // upon instantiation
 
   /** Definitions doesn't contain one for MapClass */
-  protected lazy val MapClass = definitions.getClass("scala.collection.immutable.Map")
+  protected lazy val MapClass = definitions.getClass(stringToTypeName("scala.collection.immutable.Map"))
 
   /** Avro Scala Plugin Traits */
-  protected lazy val avroRecordTrait = definitions.getClass("edu.berkeley.cs.avro.marker.AvroRecord")
-  protected lazy val avroPairTrait = definitions.getClass("edu.berkeley.cs.avro.marker.AvroPair")
-  protected lazy val avroUnionTrait = definitions.getClass("edu.berkeley.cs.avro.marker.AvroUnion")
+  protected lazy val avroRecordTrait = definitions.getClass(stringToTypeName("edu.berkeley.cs.avro.marker.AvroRecord"))
+  protected lazy val avroPairTrait = definitions.getClass(stringToTypeName("edu.berkeley.cs.avro.marker.AvroPair"))
+  protected lazy val avroUnionTrait = definitions.getClass(stringToTypeName("edu.berkeley.cs.avro.marker.AvroUnion"))
 
   /** Avro Extra Primitive Types */
-  protected lazy val byteBufferClass = definitions.getClass("java.nio.ByteBuffer")
-  protected lazy val utf8Class = definitions.getClass("org.apache.avro.util.Utf8")
+  protected lazy val byteBufferClass = definitions.getClass(stringToTypeName("java.nio.ByteBuffer"))
+  protected lazy val utf8Class = definitions.getClass(stringToTypeName("org.apache.avro.util.Utf8"))
 
   /** Avro Internal Types */
-  protected lazy val GenericRecordClass = definitions.getClass("org.apache.avro.generic.GenericRecord")
-  protected lazy val GenericArrayClass = definitions.getClass("org.apache.avro.generic.GenericArray")
-  protected lazy val schemaClass = definitions.getClass("org.apache.avro.Schema")
-  protected lazy val SpecificRecordIface = definitions.getClass("org.apache.avro.specific.SpecificRecord")
-  protected lazy val SpecificRecordBaseClass = definitions.getClass("org.apache.avro.specific.SpecificRecordBase")
-  protected lazy val JMapClass = definitions.getClass("java.util.Map")
+  protected lazy val GenericRecordClass = definitions.getClass(stringToTypeName("org.apache.avro.generic.GenericRecord"))
+  protected lazy val GenericArrayClass = definitions.getClass(stringToTypeName("org.apache.avro.generic.GenericArray"))
+  protected lazy val schemaClass = definitions.getClass(stringToTypeName("org.apache.avro.Schema"))
+  protected lazy val SpecificRecordIface = definitions.getClass(stringToTypeName("org.apache.avro.specific.SpecificRecord"))
+  protected lazy val SpecificRecordBaseClass = definitions.getClass(stringToTypeName("org.apache.avro.specific.SpecificRecordBase"))
+  protected lazy val JMapClass = definitions.getClass(stringToTypeName("java.util.Map"))
 
   /** Scala Avro Internal types */
   protected lazy val AvroPairGenericRecordClass = 
-    definitions.getClass("edu.berkeley.cs.avro.runtime.AvroPairGenericRecord")
-  protected lazy val ScalaSpecificRecord = definitions.getClass("edu.berkeley.cs.avro.runtime.ScalaSpecificRecord")
-  protected lazy val AvroConversions = definitions.getClass("edu.berkeley.cs.avro.runtime.HasAvroConversions")
+    definitions.getClass(stringToTypeName("edu.berkeley.cs.avro.runtime.AvroPairGenericRecord"))
+  protected lazy val ScalaSpecificRecord = definitions.getClass(stringToTypeName("edu.berkeley.cs.avro.runtime.ScalaSpecificRecord"))
+  protected lazy val AvroConversions = definitions.getClass(stringToTypeName("edu.berkeley.cs.avro.runtime.HasAvroConversions"))
 
   /** Takes a class symbol and maps to its associated Schema object */
   protected val classToSchema: Map[Symbol, Schema]

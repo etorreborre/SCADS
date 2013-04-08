@@ -42,10 +42,10 @@ trait Extender extends ScalaAvroPluginComponent
   class ExtenderTransformer(unit: CompilationUnit) extends TypingTransformer(unit) {
     import CODE._
 
-    private val DefaultValues = Map(
+    private val DefaultValues = Map[Symbol, Literal](
       IntClass     -> LIT(0),
       LongClass    -> LIT(0L),
-      FloatClass   -> LIT(0.f),
+      FloatClass   -> LIT(0.0f),
       DoubleClass  -> LIT(0.0),
       BooleanClass -> FALSE,
       ShortClass   -> LIT(0),
@@ -129,7 +129,7 @@ trait Extender extends ScalaAvroPluginComponent
           if (cdr isEmpty)
             throw new IllegalArgumentException("Nothing to select: " + s)
           else {
-            val sym = definitions.getModule(car.head)
+            val sym = definitions.getModule(stringToTermName(car.head))
             val first = (car.head, Ident(newTermName(car.head)) setSymbol sym setType sym.tpe)
             cdr.zipWithIndex.foldLeft[(String,Tree)](first)((tuple1, tuple2) => {
               val (name, tree) = tuple1
@@ -137,9 +137,9 @@ trait Extender extends ScalaAvroPluginComponent
               val newName = name + "." + sel
               val sym = 
                 if (idx == cdr.length - 1)
-                  definitions.getClass(newName)
+                  definitions.getClass(stringToTypeName(newName))
                 else 
-                  definitions.getModule(newName)
+                  definitions.getModule(stringToTermName(newName))
               (newName, Select(tree, if (idx == cdr.length - 1) newTypeName(sel) else newTermName(sel)) setSymbol sym setType sym.tpe)
             })._2
           }

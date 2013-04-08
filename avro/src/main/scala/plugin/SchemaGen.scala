@@ -42,7 +42,7 @@ trait SchemaGen extends ScalaAvroPluginComponent
   class SchemaGenTransformer(unit: CompilationUnit) extends TypingTransformer(unit) {
     import CODE._
 
-    private val primitiveClasses = Map(
+    private val primitiveClasses = Map[Symbol, Schema](
       /** Primitives in the Scala and Avro sense */
       IntClass     -> Schema.create(AvroType.INT),
       FloatClass   -> Schema.create(AvroType.FLOAT),
